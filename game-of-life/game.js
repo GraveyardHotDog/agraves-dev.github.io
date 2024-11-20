@@ -85,9 +85,10 @@ function updateCell(x, y) {
             }
         }
     }
-    if (count > 4 || count < 3) return 1;
+    if (count >= 4 || count < 2) return 1;
     if (grid[0][x][y] === 1 && count === 3) return 0;
-    return grid[0][x][y];
+    if (grid[0][x][y] === 0 && count === 2) return 0;
+    return 1;
 }
 
 canvas.addEventListener("click", (event) => {
