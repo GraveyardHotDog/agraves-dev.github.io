@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Game of Life</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <button onclick="location.href = '../index.html'">Home</button>
+    <h1>Game Of Life</h1>
+    <div class="centeredFlex">
+        <button onclick="startSimulation()">Start</button>
+        <button onclick="stopSimulation()">Stop</button>
+        <button onclick="resetGrid()">Reset</button>
+        <label for="speed">Simulation Speed (ms):</label>
+        <input id="speed" type="range" min="50" max="1000" step="50"
+               oninput="setSimulationSpeed(this.value)">
+        <span id="speedValue"></span>
+    </div>
+    <br>
+    <div class="centeredFlex">
+        <canvas id="gameOfLife" width="720" height="720" class="canvas"></canvas>
+    </div>
+    <script src="game.js"></script>
+    <br>
+
+</body>
+</html>
