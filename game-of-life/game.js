@@ -1,4 +1,10 @@
-let size = 25;
+let grid = [];
+
+let onMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)
+let size
+if (!onMobile) size = 25
+else size = Math.max(Math.floor(document.getElementById("gameOfLife").width / 12), 50)
+
 let running = false;
 let animationFrameId = null;
 let simulationSpeed = 500;
@@ -11,23 +17,37 @@ document.getElementById("gameOfLife").height = ((window.innerHeight - canvas.get
 let width = canvas.width;
 let height = canvas.height;
 
+window.addEventListener('resize', () => resize());
+
+function resize(){
+    if (!onMobile) size = 25
+    else size = Math.max(Math.floor(document.getElementById("gameOfLife").width / 12), 50)
+
+    document.getElementById("gameOfLife").width = (window.innerWidth * 0.9) - ((window.innerWidth * 0.9) % size);
+    document.getElementById("gameOfLife").height = ((window.innerHeight - canvas.getBoundingClientRect().top) * 0.95) - (((window.innerHeight - canvas.getBoundingClientRect().top) * 0.95) % size);
+
+    width = canvas.width;
+    height = canvas.height;
+    grid[0] = gridInit(width / size, height / size, true, grid[0]);
+    drawGrid();
+}
+
 function draw(xSize, ySize, style, squareWidth, squareHeight = squareWidth) {
     game.fillStyle = style;
     game.fillRect(xSize, ySize, squareWidth, squareHeight);
 }
 
-function gridInit(w, h) {
+function gridInit(w, h, softReset = false, previousGrid= []) {
     let grid = [];
     for (let i = 0; i < w; i++) {
         grid[i] = [];
         for (let j = 0; j < h; j++) {
-            grid[i][j] = 1;
+            if(softReset && (previousGrid[i] !== undefined && previousGrid[i][j] !== undefined)) grid[i][j] = previousGrid[i][j]
+            else grid[i][j] = 1
         }
     }
     return grid;
 }
-
-let grid = [];
 
 function create() {
     grid[0] = gridInit(width / size, height / size);
@@ -85,9 +105,9 @@ function updateCell(x, y) {
             }
         }
     }
-    if (count > 4 || count < 3) return 1;
-    if (grid[0][x][y] === 1 && count === 3) return 0;
-    return grid[0][x][y];
+    if (count === 2 && grid[0][x][y] === 0) return 0;
+    if (count === 3) return 0;
+    return 1;
 }
 
 canvas.addEventListener("click", (event) => {
@@ -125,6 +145,7 @@ function setSimulationSpeed(speed) {
     document.getElementById("speedValue").textContent = speed;
 }
 
+resize()
 document.getElementById("speed").value = simulationSpeed
 document.getElementById("speedValue").textContent = simulationSpeed;
 create();

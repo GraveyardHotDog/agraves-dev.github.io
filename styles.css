@@ -37,6 +37,9 @@ button{
     text-decoration: none;
     margin: 4px 2px;
     border-radius: 2px;
+    @media (pointer: none), (pointer: coarse) {
+        font-size: 35px;
+    }
 }
 .centeredFlex{
     display: flex;
@@ -49,4 +52,17 @@ canvas{
     margin: 0;
     padding: 0;
     border: 3px solid var(--thirdColor);
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    position: relative;
+}
+.header h1 {
+    margin: 0;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }

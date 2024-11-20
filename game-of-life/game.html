@@ -9,8 +9,10 @@
     <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
-    <button onclick="location.href = '../index.html'">Home</button>
-    <h1>Game Of Life</h1>
+    <div class="header">
+        <button onclick="location.href = '../index.html'">Home</button>
+        <h1>Game of Life</h1>
+    </div>
     <div class="centeredFlex">
         <button onclick="startSimulation()">Start</button>
         <button onclick="stopSimulation()">Stop</button>
@@ -25,7 +27,5 @@
         <canvas id="gameOfLife" width="720" height="720" class="canvas"></canvas>
     </div>
     <script src="game.js"></script>
-    <br>
-
 </body>
 </html>
