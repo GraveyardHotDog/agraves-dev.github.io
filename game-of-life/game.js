@@ -32,9 +32,9 @@ function resize(){
     drawGrid();
 }
 
-function draw(xSize, ySize, style, squareWidth, squareHeight = squareWidth) {
+function draw(xCoordinate, yCoordinate, style, squareWidth, squareHeight = squareWidth) {
     game.fillStyle = style;
-    game.fillRect(xSize, ySize, squareWidth, squareHeight);
+    game.fillRect(xCoordinate, yCoordinate, squareWidth, squareHeight);
 }
 
 function gridInit(w, h, softReset = false, previousGrid= []) {
