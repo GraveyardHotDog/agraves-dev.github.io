@@ -14,8 +14,18 @@ let scale = 50
 let lineWidth = 3
 
 function evaluate(x) {
+    let equation = textBox.value;
+    equation = equation.replaceAll('sin', 'Math.sin')
+    equation = equation.replaceAll('cos', 'Math.cos')
+    equation = equation.replaceAll('tan', 'Math.tan')
+    equation = equation.replaceAll('arcsin', 'Math.asin')
+    equation = equation.replaceAll('arccos', 'Math.acos')
+    equation = equation.replaceAll('arctan', 'Math.atan')
+    equation = equation.replaceAll('csc', '1/Math.sin')
+    equation = equation.replaceAll('sec', '1/Math.cos')
+    equation = equation.replaceAll('cot', '1/Math.cot')
+    equation = equation.replaceAll('^', '**')
     try {
-        let equation = textBox.value;
         return Function("x", `return ${equation}`)(x);
     } catch {
         return null;
