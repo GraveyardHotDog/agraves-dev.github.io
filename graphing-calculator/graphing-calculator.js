@@ -15,18 +15,20 @@ let lineWidth = 3
 
 function evaluate(x) {
     let equation = textBox.value;
-    equation = equation.replaceAll('sin', 'Math.sin')
-    equation = equation.replaceAll('cos', 'Math.cos')
-    equation = equation.replaceAll('tan', 'Math.tan')
-    equation = equation.replaceAll('arcsin', 'Math.asin')
-    equation = equation.replaceAll('arccos', 'Math.acos')
-    equation = equation.replaceAll('arctan', 'Math.atan')
-    equation = equation.replaceAll('csc', '1/Math.sin')
-    equation = equation.replaceAll('sec', '1/Math.cos')
-    equation = equation.replaceAll('cot', '1/Math.cot')
-    equation = equation.replaceAll('^', '**')
+    equation = equation.replaceAll(/\bsin\b/g, "Math.sin");
+    equation = equation.replaceAll(/\bcos\b/g, "Math.cos");
+    equation = equation.replaceAll(/\btan\b/g, "Math.tan");
+    equation = equation.replaceAll(/\barcsin\b/g, "Math.asin");
+    equation = equation.replaceAll(/\barccos\b/g, "Math.acos");
+    equation = equation.replaceAll(/\barctan\b/g, "Math.atan");
+    equation = equation.replaceAll(/\bcsc\b/g, "1/Math.sin");
+    equation = equation.replaceAll(/\bsec\b/g, "1/Math.cos");
+    equation = equation.replaceAll(/\bcot\b/g, "1/Math.tan");
+    equation = equation.replaceAll(/\^/g, '**');
     try {
-        return Function("x", `return ${equation}`)(x);
+        let result = Function("x", `return ${equation}`)(x);
+        if (isNaN(result) || !isFinite(result)) return null;
+        else return result;
     } catch {
         return null;
     }
