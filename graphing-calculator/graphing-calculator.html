@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Apollo Graves</title>
+    <link rel="stylesheet" href="../styles.css?v=2">
+</head>
+<body>
+    <div class="header">
+        <button onclick="location.href = '../index.html'">Home</button>
+        <h1>Graphing Calculator</h1>
+    </div>
+
+    <div class="centeredFlex">
+        <label for="equation">y = </label><input type="text" id="equation">
+        <p>(js format, use 'Math' for functions)</p>
+        <label for="scale">Scale</label><input id="scale" type="range" min="1" max="1000" step="10"
+                                          oninput="setScale(this.value)">
+    </div>
+    <div class="centeredFlex">
+        <canvas id="graph" width="720" height="720" class="canvas"></canvas>
+    </div>
+    <script src="graphing-calculator.js?v=1"></script>
+</body>
+</html>
