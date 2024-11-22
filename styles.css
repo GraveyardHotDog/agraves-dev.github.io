@@ -75,3 +75,16 @@ canvas{
     left: 0;
     border: 0;
 }
+table{
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid var(--thirdColor);
+}
+th, td {
+    border: 1px solid var(--thirdColor);
+    collapse: collapse;
+}
+input{
+    margin: 5px;
+}
