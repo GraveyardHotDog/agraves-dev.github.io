@@ -7,9 +7,18 @@ let thirdColor = getComputedStyle(document.documentElement).getPropertyValue('--
 let ctx = canvas.getContext('2d');
 
 let dotRadius = 2 // px
-let dotSpeed = .1
 let alphaSpeed = .001
-let numberOfDots = 20
+let numberOfDots = 25
+let collisionAvoidanceDistance = 10
+let avoidFactor = .05
+let centeringFactor = .00001
+let viewDistance = 30
+let edgeMargin = 30
+let edgeAvoidanceFactor = .2
+let alignmentFactor = .05
+let minimumSpeed = .5
+let maximumSpeed = 2
+
 
 let running = false;
 let animationFrameId = null;
@@ -22,7 +31,7 @@ window.addEventListener('resize', () => resize());
 function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    let newNumberOfDots = Math.floor(canvas.width * canvas.height / 2000);
+    let newNumberOfDots = Math.floor(canvas.width * canvas.height / 5000);
 
     if (newNumberOfDots > numberOfDots) {
         points = createRandomPoints(newNumberOfDots, points);
@@ -35,12 +44,13 @@ function resize() {
 
 
 class Point{
-    constructor(x, y, direction, alpha, positive) {
+    constructor(x, y,dx, dy, alpha, positiveAlpha) {
         this.x = x;
         this.y = y;
-        this.direction = direction;
-        this.alpha = alpha
-        this.positive = positive;
+        this.dx = dx;
+        this.dy = dy;
+        this.alpha = 1;
+        this.positiveAlpha = positiveAlpha;
     }
 }
 
@@ -51,14 +61,21 @@ function createRandomPoints(number, previousPoints = []){
     for(let i = 0; i < number; i++){
         if(previousPoints[i] === undefined)
             points[i] =
-                new Point(Math.random() * canvas.width,
+                new Point(
+                    Math.random() * canvas.width,
                     Math.random() * canvas.height,
-                    Math.random() * 2 * Math.PI,
+                    ((Math.random() * 2) - 1) * minimumSpeed,
+                    ((Math.random() * 2) - 1) * minimumSpeed,
                     Math.random() * 2 - 1,
-                    Math.round(Math.random()));
+                    Math.round(Math.random())
+                );
         else points[i] = previousPoints[i];
     }
     return points;
+}
+
+function pointDistance(point1, point2) {
+    return Math.hypot(point1.x - point2.x, point1.y - point2.y);
 }
 
 function plotPoints(timestamp){
@@ -67,18 +84,86 @@ function plotPoints(timestamp){
     ctx.fillRect(0 , 0, canvas.width, canvas.height);
     ctx.fillStyle = thirdColor;
     for(let point of points){
-        ctx.globalAlpha = Math.max(point.alpha, 0);
-        if(point.alpha <= -1) point.positive = true
-        if(point.alpha >= 1) point.positive = false
-        if(point.positive) point.alpha += alphaSpeed
-        else point.alpha -= alphaSpeed
+        
+        //alpha stuff
+        // ctx.globalAlpha = Math.max(point.alpha, 0);
+        // if(point.alpha <= -1) point.positiveAlpha = true
+        // if(point.alpha >= 1) point.positiveAlpha = false
+        // if(point.positiveAlpha) point.alpha += alphaSpeed
+        // else point.alpha -= alphaSpeed
 
-        point.x = point.x + Math.cos(point.direction) * dotSpeed
-        point.y = point.y + Math.sin(point.direction) * dotSpeed
+        //separate
+        let closeDx = 0
+        let closeDy = 0
+        for (let evalPoint of points) {
+            if (point !== evalPoint && pointDistance(point, evalPoint) < collisionAvoidanceDistance) {
+                closeDx += point.x - evalPoint.x;
+                closeDy += point.y - evalPoint.y;
+            }
+        }
+        point.dx += closeDx * avoidFactor
+        point.dy += closeDy * avoidFactor
 
-        if((point.x <= dotRadius && Math.sign(Math.cos(point.direction)) < 0) || (point.x >= (canvas.width - dotRadius) && Math.sign(Math.cos(point.direction)) > 0)) point.direction = Math.PI - point.direction
-        if((point.y <= dotRadius && Math.sign(Math.sin(point.direction)) < 0) || (point.y >= (canvas.height - dotRadius) && Math.sign(Math.sin(point.direction)) > 0)) point.direction = -point.direction
+        //alignment
+        let numNearbyDots = 0
+        let dxAverage = 0
+        let dyAverage = 0
+        for (let evalPoint of points) {
+            if (point !== evalPoint && pointDistance(point, evalPoint) < viewDistance) {
+                dxAverage += evalPoint.dx
+                dyAverage += evalPoint.dy
+                numNearbyDots += 1;
+            }
+        }
+        if (numNearbyDots > 0) {
+            dxAverage /= numNearbyDots;
+            dyAverage /= numNearbyDots;
+            point.dx += (dxAverage - point.dx) * alignmentFactor;
+            point.dy += (dyAverage - point.dy) * alignmentFactor;
+        }
 
+        //cohesion
+        let xAverage = 0
+        let yAverage = 0
+        numNearbyDots = 0
+        for (let evalPoint of points) {
+            if(point !== evalPoint && pointDistance(point, evalPoint) < viewDistance) {
+                xAverage += evalPoint.x
+                yAverage += evalPoint.y
+                numNearbyDots++
+            }
+        }
+        if (numNearbyDots > 0) {
+            xAverage /= numNearbyDots;
+            yAverage /= numNearbyDots;
+            point.dx += (xAverage - point.x) * centeringFactor;
+            point.dy += (yAverage - point.y) * centeringFactor;
+        }
+
+        //boundaries
+        if(point.x < edgeMargin) point.dx += edgeAvoidanceFactor
+        if(point.y < edgeMargin) point.dy += edgeAvoidanceFactor
+        if(point.x > (canvas.width - edgeMargin)) point.dx -= edgeAvoidanceFactor
+        if(point.y > (canvas.height - edgeMargin)) point.dy -= edgeAvoidanceFactor
+        // if((point.x <= dotRadius && Math.sign(point.dx) < 0) || (point.x >= (canvas.width - dotRadius) && Math.sign(point.dx) > 0)) point.dx = -point.dx
+        // if((point.y <= dotRadius && Math.sign(point.dy) < 0) || (point.y >= (canvas.height - dotRadius) && Math.sign(point.dy) > 0)) point.dy = -point.dy
+
+        //this is not the autobahn
+        let speed = Math.hypot(point.dx, point.dy);
+        if(speed > maximumSpeed){
+            point.dx = (point.dx / speed) * maximumSpeed;
+            point.dy = (point.dy / speed) * maximumSpeed
+        }
+        if(speed < minimumSpeed){
+            point.dx = (point.dx / speed) * minimumSpeed;
+            point.dy = (point.dy / speed) * minimumSpeed;
+        }
+
+        //make things happen
+        point.x += point.dx
+        point.y += point.dy
+
+        //draw
         ctx.beginPath();
         ctx.arc(point.x, point.y, dotRadius, 0, 2 * Math.PI);
         ctx.stroke()
