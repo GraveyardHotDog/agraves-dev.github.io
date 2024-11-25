@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>FRC Event Tool</title>
+  <link rel="stylesheet" href="../styles.css?v=3">
+</head>
+<body>
+  <div class="header">
+    <button onclick="location.href = '../index.html'">Home</button>
+    <h1>FRC Event Tool</h1>
+  </div>
+  <label for="Team Number">Team Number: </label><input type="number" id="Team Number">
+  <label id="Next Event">Next Event: </label>
+  <table id="dataTable" class="eventTable">
+    <thead>
+      <tr>
+        <th id="nameHeader" onclick="sortTeamData('name')" style="width:200px">Name</th>
+        <th id="numberHeader" onclick="sortTeamData('number')" style="width:60px">Number</th>
+        <th id="epaHeader" onclick="sortTeamData('normalizedEPA')" style="width:60px">Normalized EPA</th>
+        <th id="rankHeader" onclick="sortTeamData('rank')" style="width:30px">Rank</th>
+        <th id="winLossHeader" onclick="sortTeamData('winLoss')" style="width:100px">Win/Loss</th>
+        <th id="rpAvgHeader" onclick="sortTeamData('rpAvg')" style="width:50px">RP Avg</th>
+        <th id="coopAvgHeader" onclick="sortTeamData('coopAvg')" style="width:50px">Coop Avg</th>
+        <th id="matchAvgHeader" onclick="sortTeamData('matchAvg')" style="width:50px">Match Avg</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <br/>
+  <table id="matchTable" class="eventTable">
+    <thead>
+    <tr>
+      <th id="matchNumber" style="width:50px">Match</th>
+      <th id="matchTime" style="width:100px">Time</th>
+      <th id="redAlliance" style="width:120px">Red Alliance</th>
+      <th id="blueAlliance" style="width:120px">Blue Alliance</th>
+      <th id="winPercentage" style="width:50px">Win %</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <script src="frc-event-tool.js?v=2"></script>
+</body>
+</html>
