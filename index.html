@@ -17,8 +17,26 @@
             <img src="images/github-mark-white.svg" alt="GitHub" width="50" height="50">
         </a>
     </div>
-    <button onclick="location.href = 'game-of-life/game.html?v=1'" class="defaultButton">Game of Life</button>
-    <button onclick="location.href = 'graphing-calculator/graphing-calculator.html?v=1'" class="defaultButton">Graphing Calculator</button>
-    <button onclick="location.href = 'frc-event-tool/frc-event-tool.html?v=1'" class="defaultButton">FRC Event Tool</button>
+    <script>
+        const buttons = [
+            { text: "Game of Life", url: "game-of-life/game.html?v=1" },
+            { text: "Graphing Calculator", url: "graphing-calculator/graphing-calculator.html?v=1" },
+            { text: "FRC Event Tool", url: "frc-event-tool/frc-event-tool.html?v=1" },
+            { text: "Melvor Idle Store Search Mod", url: "https://mod.io/g/melvoridle/m/storesearch" },
+        ];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const container = document.getElementById("button-container");
+            buttons.forEach(({ text, url }) => {
+                const button = document.createElement("button");
+                button.textContent = text;
+                button.className = "defaultButton";
+                button.onclick = () => (location.href = url);
+                container.appendChild(button);
+            });
+        });
+    </script>
+
+    <div id="button-container"></div>
 </body>
 </html>
