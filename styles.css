@@ -2,6 +2,7 @@
     --firstColor: #424242;
     --secondColor: #eaeaea;
     --thirdColor: #5097ca;
+    --fourthColor: rgba(80, 151, 202, 0.7);
 }
 
 body{
@@ -14,6 +15,10 @@ body{
 }
 h1{
     font-size: xx-large;
+    font-weight: 450;
+}
+h2{
+    font-size: x-large;
     font-weight: normal;
     text-align: center;
 }
@@ -27,7 +32,7 @@ h1{
 button{
     font-family: inherit;
     font-optical-sizing: inherit;
-    font-size: medium;
+    font-size: large;
     font-weight: inherit;
     color: var(--secondColor);
     background-color: var(--thirdColor);
@@ -36,10 +41,21 @@ button{
     text-align: center;
     text-decoration: none;
     margin: 4px 2px;
-    border-radius: 2px;
+    border-radius: 5px;
     @media (pointer: none), (pointer: coarse) {
-        font-size: 35px;
+        font-size: 50px;
+        border-radius: 10px;
     }
+    transition: 0.3s;
+    cursor: pointer;
+}
+button:hover {background-color: var(--fourthColor);}
+
+.projectButtons{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 .centeredFlex{
     display: flex;
@@ -48,24 +64,46 @@ button{
     align-items: center;
     gap: 5px;
 }
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    width: 500px;
+    justify-self: center;
+    justify-content: center;
+}
+.grid-container div{
+    background: var(--firstColor);
+    padding: 20px;
+    border: 2px solid var(--secondColor);
+    text-align: center;
+    border-radius: 10px;
+}
+.grid-container img{
+    height: 70px;
+}
+
 canvas{
     margin: 0;
     padding: 0;
     border: 3px solid var(--thirdColor);
 }
-.header {
+
+.headerFlex {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px;
     position: relative;
 }
-.header h1 {
+.headerFlex h1 {
     margin: 0;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
 }
+
 .backgroundCanvas{
     margin: 0;
     padding: 0;
@@ -84,7 +122,6 @@ canvas{
     border: 1px solid var(--thirdColor);
     collapse: collapse;
 }
-
 input{
     margin: 5px;
 }

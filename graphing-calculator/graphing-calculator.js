@@ -25,6 +25,10 @@ function evaluate(x) {
     equation = equation.replaceAll(/\bsec\b/g, "1/Math.cos");
     equation = equation.replaceAll(/\bcot\b/g, "1/Math.tan");
     equation = equation.replaceAll(/\^/g, '**');
+    equation = equation.replaceAll(/\blog\b/g, "Math.log10");
+    equation = equation.replaceAll(/\bln\b/g, "Math.log");
+    console.log("Processed Equation:", equation);
+
     try {
         let result = Function("x", `return ${equation}`)(x);
         if (isNaN(result) || !isFinite(result)) return null;

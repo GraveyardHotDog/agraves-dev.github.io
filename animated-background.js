@@ -7,11 +7,10 @@ let thirdColor = getComputedStyle(document.documentElement).getPropertyValue('--
 let ctx = canvas.getContext('2d');
 
 let dotRadius = 2 // px
-let alphaSpeed = .001
 let numberOfDots = 25
-let collisionAvoidanceDistance = 10
-let avoidFactor = .1
-let centeringFactor = .00001
+let collisionAvoidanceDistance = 15
+let avoidFactor = .05
+let centeringFactor = .000005
 let viewDistance = 30
 let edgeMargin = 30
 let edgeAvoidanceFactor = .2
@@ -42,8 +41,6 @@ class Point {
         this.y = y;
         this.dx = dx;
         this.dy = dy;
-        this.alpha = 1;
-        this.positiveAlpha = positiveAlpha;
     }
 }
 
@@ -153,9 +150,8 @@ function plotPoints(timestamp) {
         ctx.stroke();
         ctx.fill();
     }
-
     requestAnimationFrame(plotPoints);
 }
-
+addEventListener("resize", resize);
 resize();
 requestAnimationFrame(plotPoints);
