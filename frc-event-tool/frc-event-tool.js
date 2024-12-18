@@ -8,6 +8,7 @@ let textBox = document.getElementById("Team Number");
 let eventText = document.getElementById("Next Event")
 let matchTable = document.getElementById("matchTable").getElementsByTagName("tbody")[0];
 let teamData;
+let teamNumberLoader = document.getElementById("teamNumberLoader");
 
 const fetchTbaData = async (teamNumber) => {
     try {
@@ -220,7 +221,7 @@ async function addTeamData(teamNumber)  {
     eventTable.innerHTML = "";
     matchTable.innerHTML = "";
 
-    let event = "2024wasno" //await fetchNextEvent(teamNumber);
+    let event = await fetchNextEvent(teamNumber);
     let teams = await fetchEventTeams(event);
     let eventStatus = await fetchEventStatuses(event);
     let matches = await fetchTeamMatches(teamNumber, event)
@@ -337,8 +338,16 @@ function sortTeamData(column) {
     printEventData(teamData);
 }
 
-textBox.addEventListener("keydown", (event) =>{
-    if(event.key === "Enter") {
-        addTeamData(textBox.value).then(() => sortTeamData("normalizedEPA"));
+let isLoading= false
+teamNumberLoader.hidden = true
+textBox.addEventListener("keydown", async (event) => {
+    if (event.key === "Enter" && !isLoading) {
+        isLoading = true;
+        textBox.disabled = true;
+        teamNumberLoader.hidden = false
+        await addTeamData(textBox.value).then(() => sortTeamData("normalizedEPA"));
+        teamNumberLoader.hidden = true
+        isLoading = false;
+        textBox.disabled = false;
     }
 });

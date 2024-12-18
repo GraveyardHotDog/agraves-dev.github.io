@@ -13,7 +13,11 @@
     <button onclick="location.href = '../index.html'">Home</button>
     <h1>FRC Event Tool</h1>
   </div>
-  <label for="Team Number">Team Number: </label><input type="number" id="Team Number">
+  <div class="horizontalFlex">
+    <label for="Team Number">Team Number: </label><input type="number" id="Team Number">
+    <div id="teamNumberLoader" class="loader"></div>
+  </div>
+  <br>
   <label id="Next Event">Next Event: </label>
   <table id="dataTable" class="eventTable">
     <thead>
@@ -43,6 +47,6 @@
     </thead>
     <tbody></tbody>
   </table>
-  <script src="frc-event-tool.js?v=2"></script>
+  <script src="frc-event-tool.js?v=3"></script>
 </body>
 </html>
