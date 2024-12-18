@@ -15,7 +15,7 @@ body{
 }
 h1{
     font-size: xx-large;
-    font-weight: 450;
+    font-weight: 425;
 }
 h2{
     font-size: x-large;
@@ -66,12 +66,11 @@ button:hover {background-color: var(--fourthColor);}
 }
 
 .grid-container {
+    margin: 0 auto;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
     width: 500px;
-    justify-self: center;
-    justify-content: center;
 }
 .grid-container div{
     background: var(--firstColor);
@@ -80,6 +79,7 @@ button:hover {background-color: var(--fourthColor);}
     text-align: center;
     border-radius: 10px;
 }
+
 .grid-container img{
     height: 70px;
 }
